@@ -1,0 +1,106 @@
+Setting environment for using XAMPP for Windows.
+Dimas Ramadhan@LAPTOP-TUER0DHR c:\xamppFix
+# mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 8
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use db_latihan_joinn;
+Database changed
+MariaDB [db_latihan_joinn]> select * from pelanggan;
+Empty set (0.057 sec)
+
+MariaDB [db_latihan_joinn]> create table pesanan (
+    -> id_pesanan int primary key,
+    -> id_pelanggan int,
+    -> produk varchar(50),
+    -> harga int
+    -> );
+MariaDB [db_latihan_joinn]> select * from pesanan;
+Empty set (0.005 sec)
+
+MariaDB [db_latihan_joinn]> INSERT INTO pelanggan (id_pelanggan, nama) VALUES
+    -> (1, 'Andi'),
+    -> (2, 'Budi'),
+    -> (3, 'Citra');
+Query OK, 3 rows affected (0.002 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [db_latihan_joinn]> select * from pelanggan;
++--------------+-------+
+| id_pelanggan | nama  |
++--------------+-------+
+|            1 | Andi  |
+|            2 | Budi  |
+|            3 | Citra |
++--------------+-------+
+3 rows in set (0.001 sec)
+
+MariaDB [db_latihan_joinn]> insert into pesanan (id_pesanan, id_pelanggan, produk, harga) values
+    -> (101, 1, 'Laptop', 8000000),
+    -> (102, 1, 'Mouse', 200000),
+    -> (103, 2, 'Keyboard', 500000),
+    -> (104, 4, 'Monitor', 2000000);
+Query OK, 4 rows affected (0.008 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [db_latihan_joinn]> select * from pesanan;
++------------+--------------+----------+---------+
+| id_pesanan | id_pelanggan | produk   | harga   |
++------------+--------------+----------+---------+
+|        101 |            1 | Laptop   | 8000000 |
+|        102 |            1 | Mouse    |  200000 |
+|        103 |            2 | Keyboard |  500000 |
+|        104 |            4 | Monitor  | 2000000 |
++------------+--------------+----------+---------+
+4 rows in set (0.001 sec)
+
+MariaDB [db_latihan_joinn]> SELECT pelanggan.id_pelanggan, pelanggan.nama,
+    ->        pesanan.id_pesanan, pesanan.produk, pesanan.harga
+    -> FROM pelanggan
+    -> INNER JOIN pesanan
+    -> ON pelanggan.id_pelanggan = pesanan.id_pelanggan
+    -> LIMIT 3;
++--------------+------+------------+----------+---------+
+| id_pelanggan | nama | id_pesanan | produk   | harga   |
++--------------+------+------------+----------+---------+
+|            1 | Andi |        101 | Laptop   | 8000000 |
+|            1 | Andi |        102 | Mouse    |  200000 |
+|            2 | Budi |        103 | Keyboard |  500000 |
++--------------+------+------------+----------+---------+
+3 rows in set (0.001 sec)
+
+MariaDB [db_latihan_joinn]> SELECT pelanggan.id_pelanggan, pelanggan.nama,
+    ->        pesanan.id_pesanan, pesanan.produk, pesanan.harga
+    -> FROM pelanggan
+    -> LEFT JOIN pesanan
+    -> ON pelanggan.id_pelanggan = pesanan.id_pelanggan
+    -> ORDER BY pesanan.harga DESC;
++--------------+-------+------------+----------+---------+
+| id_pelanggan | nama  | id_pesanan | produk   | harga   |
++--------------+-------+------------+----------+---------+
+|            1 | Andi  |        101 | Laptop   | 8000000 |
+|            2 | Budi  |        103 | Keyboard |  500000 |
+|            1 | Andi  |        102 | Mouse    |  200000 |
+|            3 | Citra |       NULL | NULL     |    NULL |
++--------------+-------+------------+----------+---------+
+4 rows in set (0.000 sec)
+
+MariaDB [db_latihan_joinn]> SELECT pelanggan.id_pelanggan, pelanggan.nama,
+    -> pesanan.id_pesanan, pesanan.produk, pesanan.harga
+    -> FROM pelanggan
+    -> RIGHT JOIN pesanan
+    -> ON pelanggan.id_pelanggan = pesanan.id_pelanggan;
++--------------+------+------------+----------+---------+
+| id_pelanggan | nama | id_pesanan | produk   | harga   |
++--------------+------+------------+----------+---------+
+|            1 | Andi |        101 | Laptop   | 8000000 |
+|            1 | Andi |        102 | Mouse    |  200000 |
+|            2 | Budi |        103 | Keyboard |  500000 |
+|         NULL | NULL |        104 | Monitor  | 2000000 |
++--------------+------+------------+----------+---------+
+4 rows in set (0.001 sec)
